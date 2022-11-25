@@ -235,17 +235,17 @@ router.afterEach(() => {
 })
 router.beforeEach((to, from, next) => {
   // Check Password
-  setTimeout(() => {
-    var getActiveUser = store.getters['auth/getActiveUser'];
-
-    var getLastUpdatedPassword = getActiveUser.props ? getActiveUser.props.passwordUpdatedAt ? new Date(getActiveUser.props.passwordUpdatedAt).getTime() : undefined : undefined;
-
-    if (getLastUpdatedPassword === undefined || getLastUpdatedPassword < 1663139421195) {
-      next({
-        path: '/change-password',
-      })
-    }
-  }, 1000)
+  // setTimeout(() => {
+  //   var getActiveUser = store.getters['auth/getActiveUser'];
+  //
+  //   var getLastUpdatedPassword = getActiveUser.props ? getActiveUser.props.passwordUpdatedAt ? new Date(getActiveUser.props.passwordUpdatedAt).getTime() : undefined : undefined;
+  //
+  //   if (getLastUpdatedPassword === undefined || getLastUpdatedPassword < 1663139421195) {
+  //     next({
+  //       path: '/change-password',
+  //     })
+  //   }
+  // }, 1000)
 
   var permission = {
     allAccess: true

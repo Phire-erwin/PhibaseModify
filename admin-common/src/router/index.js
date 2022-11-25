@@ -21,6 +21,42 @@ const router = new VueRouter({
           redirect: 'dashboard',
         },
 
+        // Profile
+        {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('@/views/Profile.vue'),
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+
+        // Change Password
+        {
+          path: '/change-password',
+          name: 'change-password',
+          component: () => import('@/views/ChangePassword.vue'),
+          meta: {
+            rule: 'editor',
+              no_scroll: true,
+              requiresAuth: true,
+            },
+        },
+
+        // Application
+        {
+          path: '/application',
+          name: 'application',
+          component: () => import('@/views/Application.vue'),
+          meta: {
+            rule: 'editor',
+              no_scroll: true,
+              requiresAuth: true,
+            },
+        },
+
         // Dashboard
         {
           path: '/dashboard',
@@ -33,141 +69,105 @@ const router = new VueRouter({
           },
         },
 
-        // // Profile
-        // {
-        //   path: '/profile',
-        //   name: 'profile',
-        //   component: () => import('@/views/Profile.vue'),
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
+        {
+          path: '/component',
+          name: 'component',
+          component: () => import('@/views/item/Component.vue'),
+          meta: {
+            rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: '/bom',
+          name: 'bom',
+          component: () => import('@/views/item/Bom.vue'),
+          meta: {
+            rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+        // Item
+        {
+          path: '/item',
+          name: 'item',
+          component: () => import('@/views/modules/item/Item.vue'),
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
 
-        // // Change Password
-        // {
-        //   path: '/change-password',
-        //   name: 'change-password',
-        //   component: () => import('@/views/ChangePassword.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //       no_scroll: true,
-        //       requiresAuth: true,
-        //     },
-        // },
-
-        // Application
-        // {
-        //   path: '/application',
-        //   name: 'application',
-        //   component: () => import('@/views/Application.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //       no_scroll: true,
-        //       requiresAuth: true,
-        //     },
-        // },
-
-        // {
-        //   path: '/component',
-        //   name: 'component',
-        //   component: () => import('@/views/item/Component.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-        // {
-        //   path: '/bom',
-        //   name: 'bom',
-        //   component: () => import('@/views/item/Bom.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-        // // Item
-        // {
-        //   path: '/item',
-        //   name: 'item',
-        //   component: () => import('@/views/modules/item/Item.vue'),
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-
-        // // Role
-        // {
-        //   path: '/role',
-        //   name: 'role',
-        //   component: () => import('@/views/modules/role/Role.vue'),
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-        // {
-        //   path: '/role/add',
-        //   name: 'role-add',
-        //   component: () => import('@/views/modules/role/AddRole.vue'),
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-        // {
-        //   path: '/role/edit/:id',
-        //   name: 'role-edit',
-        //   component: () => import('@/views/modules/role/EditRole.vue'),
-        //   props: true,
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
-        // {
-        //   path: '/role/view/:id',
-        //   name: 'role-view',
-        //   component: () => import('@/views/modules/role/ViewRole.vue'),
-        //   props: true,
-        //   meta: {
-        //   rule: 'editor',
-        //     no_scroll: true,
-        //     requiresAuth: true,
-        //   },
-        // },
+        // Role
+        {
+          path: '/role',
+          name: 'role',
+          component: () => import('@/views/modules/role/Role.vue'),
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: '/role/add',
+          name: 'role-add',
+          component: () => import('@/views/modules/role/AddRole.vue'),
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: '/role/edit/:id',
+          name: 'role-edit',
+          component: () => import('@/views/modules/role/EditRole.vue'),
+          props: true,
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
+        {
+          path: '/role/view/:id',
+          name: 'role-view',
+          component: () => import('@/views/modules/role/ViewRole.vue'),
+          props: true,
+          meta: {
+          rule: 'editor',
+            no_scroll: true,
+            requiresAuth: true,
+          },
+        },
  
-        // // User
-        // {
-        //   path: '/user',
-        //   name: 'user',
-        //   component: () => import('@/views/modules/user/User.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //     no_scroll: true,
-        //      requiresAuth: true,
-        //   },
-        // },
+        // User
+        {
+          path: '/user',
+          name: 'user',
+          component: () => import('@/views/modules/user/User.vue'),
+          meta: {
+            rule: 'editor',
+            no_scroll: true,
+             requiresAuth: true,
+          },
+        },
 
-        // // OEE
-        // {
-        //   path: '/oee',
-        //   name: 'oee',
-        //   component: () => import('@/views/modules/oee/OEE.vue'),
-        //   meta: {
-        //     rule: 'editor',
-        //     no_scroll: true,
-        //      requiresAuth: true,
-        //   },
-        // },
+        // OEE
+        {
+          path: '/oee',
+          name: 'oee',
+          component: () => import('@/views/modules/oee/OEE.vue'),
+          meta: {
+            rule: 'editor',
+            no_scroll: true,
+             requiresAuth: true,
+          },
+        },
       ]
     },
     
@@ -209,14 +209,6 @@ const router = new VueRouter({
         //     layout:'full'
         //   }
         // },
-        // {
-        //   path: '/pages/register',
-        //   name: 'register',
-        //   component: () => import('@/views/login/Register.vue'),
-        //   meta: {
-        //     layout: 'full'
-        //   },
-        // },
       ],
     },
     {
@@ -237,9 +229,9 @@ router.beforeEach((to, from, next) => {
   // Check Password
   // setTimeout(() => {
   //   var getActiveUser = store.getters['auth/getActiveUser'];
-
+  //
   //   var getLastUpdatedPassword = getActiveUser.props ? getActiveUser.props.passwordUpdatedAt ? new Date(getActiveUser.props.passwordUpdatedAt).getTime() : undefined : undefined;
-
+  //
   //   if (getLastUpdatedPassword === undefined || getLastUpdatedPassword < 1663139421195) {
   //     next({
   //       path: '/change-password',
@@ -251,14 +243,14 @@ router.beforeEach((to, from, next) => {
     allAccess: true
   };
 
-  // if (router.app.$session.get('phibase-permission')) {
-  //   permission = domainPermission('Common');
+  if (router.app.$session.get('phibase-permission')) {
+    permission = domainPermission('Common');
 
-  //   var userAccess = viewAccess();
-  //   userAccess.push('profile');
-  //   userAccess.push('change-password');
-  //   userAccess.push('application');
-  // }
+    var userAccess = viewAccess();
+    userAccess.push('profile');
+    userAccess.push('change-password');
+    userAccess.push('application');
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     var path = to.path.split('/')

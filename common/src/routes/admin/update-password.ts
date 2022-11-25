@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Password } from '../../services/password';
-import { Admin } from '../../models/admin';
+import { User } from '../../models/user';
 import { validateRequest, BadRequestError } from '@phibase/common-v2';
 
 const router = express.Router();
 
 router.put(
-  '/api/v1/common/auth/admin/update-password',
+  '/api/v1/common/auth/update-password',
   [
     body('email')
       .isEmail().withMessage('Email must be valid'),
@@ -29,7 +29,7 @@ router.put(
     } = req.body;
 
     // Find existing user
-    const existingUser = await Admin.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (!existingUser) {
       throw new BadRequestError(`Email ${email} is not registered.`);
     }

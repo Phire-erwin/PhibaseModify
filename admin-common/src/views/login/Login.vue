@@ -1,70 +1,5 @@
 <template>
   <div class="auth-wrapper auth-v2">
-
-  <!-- Form Register -->
-    <b-modal
-      id="promptApp"
-      ref="modal"
-      v-model="promptApp"
-      title="Register New Application"
-      header-bg-variant="light">
-      
-      <validation-observer>
-          <b-form-group
-          label="Application Name"
-          label-for="form-name">
-            <validation-provider
-              #default="{ errors }"
-              name="Application Name"
-              rules="required">
-              <b-form-input
-                id="form_nameApp"
-                v-model="form.nameApp"
-                :state="errors.length>0 ? false:null"
-                name="form_nameApp"
-                placeholder="Shop Store"
-                />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-
-          <b-form-group
-            label="Emaill"
-            label-for="form-emaill">
-            <validation-provider
-              #default="{ errors }"
-              name="Emaill"
-              rules="required|email">
-              <b-form-input
-                id="form-emaill"
-                v-model="form.email"
-                :state="errors.length>0 ? false:null"
-                name="form-emaill"
-                placeholder="example@gmail.com"
-                />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </validation-observer>
-        <template #modal-footer>
-          <b-button
-            size="md"
-            variant="success"
-            @click="registerUser"
-          >
-            Confirm
-          </b-button>
-          <b-button
-            size="md"
-            variant="danger"
-            @click="promptApp=false"
-          >
-            Cancel
-          </b-button>
-        </template>
-    </b-modal> -->
-
-
     <b-row class="auth-inner m-0">
       <!-- Left Text - Image -->
       <b-col
@@ -105,7 +40,7 @@
             class="font-weight-bold mb-1"
             style="text-align:center;"
           >
-            Phibase - Admin
+            Phibase - ADMIN
           </b-card-title>
           <b-card-text class="mb-2" style="text-align:center;">
             Please sign-in to your account to login
@@ -186,19 +121,10 @@
               >
                  Login
               </b-button>
-              
+
               <!-- /Submit Button -->
             </b-form>
           </validation-observer>
-
-          <!-- Register -->
-          <!-- <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
-             <b-link :to="{name:'register'}">
-              <span>Register</span>
-            </b-link> 
-          </b-card-text> -->
-          <!-- /Register -->
         </b-col>
       </b-col>
       <!-- /Login-->
@@ -226,18 +152,16 @@ export default {
     return {
       password: '',
       email: '',
-      application: '',
       app: '',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
-      email,
     }
   },
   methods: {
     loginUser() {
       this.$store
-        .dispatch('auth/admin/login', {
+        .dispatch('auth/loginAdmin', {
           email: this.email,
           password: this.password,
         })
@@ -282,13 +206,13 @@ export default {
     },
   },
   created() {
-    document.title = 'Admin | Phibase'
+    document.title = 'Phibase | Admin'
   },
-  mounted() {
-    this.$store
-      .dispatch('application/fetchApplication')
-      .catch(err => console.log(err))
-  },
+  // mounted() {
+  //   this.$store
+  //     .dispatch('application/fetchApplication')
+  //     .catch(err => console.log(err))
+  // },
 }
 </script>
 

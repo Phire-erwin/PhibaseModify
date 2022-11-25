@@ -3,16 +3,16 @@ import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import { Password } from '../../services/password';
 import { Utils } from '../../services/utils';
-import { Admin } from '../../models/admin';
 import { validateRequest, BadRequestError, NotFoundError } from '@phibase/common-v2';
 import { UserLoginPublisher } from '../../events/publishers/user-login-publisher'
 import { natsWrapper } from '../../nats-wrapper';
 import { Application } from '../../models/application';
+import { User } from "../../models/user";
 
 const router = express.Router();
 
 router.post(
-  '/api/v1/common/auth/admin/login',
+  '/api/v1/common/auth/loginadmin',
   [
     body('email')
       .notEmpty()
@@ -29,20 +29,14 @@ router.post(
       password
     } = req.body;
 
-    // const application= await Application.findOne({appID:app});
+    const existingUser = await User.findOne({ email }).populate('roleRef')
 
-    // if(!application){
-    //   throw new BadRequestError('Application data not found')
-    // }
-
-    const existingAdmin = await Admin.findOne({ email}).populate('roleRef')
-
-    if (!existingAdmin) {
+    if (!existingUser) {
       throw new NotFoundError();
     }
 
     const passwordsMatch = await Password.compare(
-      existingAdmin.password,
+      existingUser.password,
       password,
     );
 
@@ -53,8 +47,9 @@ router.post(
     // Generate JWT
     const userJwt = jwt.sign(
       {
-        id      : existingAdmin.id,
-        email   : existingAdmin.email,
+        id      : existingUser.id,
+        email   : existingUser.email,
+        role    : existingUser.role,
       },
       'secret',
     );
@@ -76,7 +71,7 @@ router.post(
     res.status(200)
       .send({
         token: userJwt,
-        existingAdmin
+        existingUser,
       });
   },
 );

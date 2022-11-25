@@ -253,7 +253,6 @@ export default {
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
-      email,
       promptApp: false,
       form: {
         nameApp:'',

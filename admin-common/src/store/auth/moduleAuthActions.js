@@ -17,10 +17,10 @@ export default {
     })
   },
 
-  login: ({ commit }, payload) => {
+  loginAdmin: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('common/auth/admin/login', payload)
+        .post('common/auth/loginadmin', payload)
         .then(res => {
           var result = res.data.existingUser;
           

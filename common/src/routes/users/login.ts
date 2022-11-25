@@ -12,7 +12,7 @@ import { Application } from '../../models/application';
 const router = express.Router();
 
 router.post(
-  '/api/v1/common/auth/admin/login',
+  '/api/v1/common/auth/login',
   [
     body('email')
       .notEmpty()
@@ -27,16 +27,15 @@ router.post(
     const {
       email,
       password,
-      app,
     } = req.body;
 
-    const application= await Application.findOne({appID:app});
+    // const application= await Application.findOne({appID:app});
+    //
+    // if(!application){
+    //   throw new BadRequestError('Application data not found')
+    // }
 
-    if(!application){
-      throw new BadRequestError('Application data not found')
-    }
-
-    const existingUser = await User.findOne({ email, "props.app": app }).populate('roleRef')
+    const existingUser = await User.findOne({ email }).populate('roleRef')
 
     if (!existingUser) {
       throw new NotFoundError();

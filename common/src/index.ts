@@ -71,8 +71,8 @@ const start = async () => {
     console.error(err);
     process.exit();
   }
-  app.listen(3000, () => {
-    console.info('Server Listening on port 3000');
+  app.listen(3002, () => {
+    console.info('Server Listening on port 3002');
   });
 };
 
