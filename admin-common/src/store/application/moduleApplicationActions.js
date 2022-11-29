@@ -34,5 +34,39 @@ export default {
         })
         .catch(err => reject(err))
     })
-  }
+  },
+
+    getReqApplication:({commit})=>{
+        new Promise((resolve, reject) => {
+            axios
+                .get('/common/request-application')
+                .then(res => {
+                    commit('GET_APPLICATION', res.data.data)
+                    resolve()
+                })
+                .catch(err => reject(err))
+        })
+    },
+    addApplication:({commit}, payload)=>{
+        new Promise((resolve, reject) => {
+            axios
+                .post('/common/applications/'+payload.id,payload)
+                .then(res => {
+                    commit('FETCH_APPLICATION', res.data)
+                    resolve()
+                })
+                .catch(err => reject(err))
+        })
+    },
+    deleteReqApplication: ({ commit },{ id }) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .delete('/common/request-applications/' + id)
+                .then(() => {
+                    commit('DELETE_REQAPPLICATION', id)
+                    resolve()
+                })
+                .catch(err => reject(err))
+        })
+    }
 }

@@ -56,4 +56,44 @@ export class Utils {
 
     console.log('Message sent: %s', info.messageId);
   }
+  static async sendEmailAdmin(options: any){
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'erwin@trillium-tech.com',
+        pass: 'PasirjatiSekehaji3-39'
+      }
+    });
+    var mailOptions = {
+      from: 'Trillium Technology <noreply.erwin@trillium-tech.com>',
+      replyTo: 'noreply.erwin@trillium-tech.com',
+      to: options.to,
+      subject: 'Application has Accept',
+      text: 'email :'+options.email+'\npassword :'+options.password
+    };
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) throw err;
+      console.log('Email sent: ' + info.response);
+    });
+  }
+  static async sendEmailAdminReject(options: any){
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'erwin@trillium-tech.com',
+        pass: 'PasirjatiSekehaji3-39'
+      }
+    });
+    var mailOptions = {
+      from: 'Trillium Technology <noreply.erwin@trillium-tech.com>',
+      replyTo: 'noreply.erwin@trillium-tech.com',
+      to: options.to,
+      subject: 'Application has Reject',
+      text: 'Application has been Rejected. Please contact admin for more informations'
+    };
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) throw err;
+      console.log('Email sent: ' + info.response);
+    });
+  }
 }

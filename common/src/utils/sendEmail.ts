@@ -1,5 +1,5 @@
 // Dependencies
-import * as nodemailer from 'nodemailer'; 
+import * as nodemailer from 'nodemailer';
 
 const sendEmail = async (options:any, SMTPSetting:any) => {
   const transporter = nodemailer.createTransport({

@@ -4,11 +4,9 @@ import { Password } from '../services/password';
 // An interface that describes the properties
 // that are required to create a new Application Info
 interface AdminAttrs {
-    email     ?: string;
-    password  ?: string;
-    role      ?: string;
-    roleRef   ?: any;
-
+    email     ?: String;
+    password  ?: String;
+    appID     ?: String;
 }
 
 // An interface that describes the properties
@@ -23,9 +21,7 @@ interface AdminDoc extends mongoose.Document {
     email     : string;
     password  : string;
     appID     : string;
-    role      : string;
     updatedAt : Date;
-    roleRef   : any;
 }
 
 const AdminSchema = new mongoose.Schema(

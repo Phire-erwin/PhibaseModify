@@ -1,10 +1,11 @@
 <template>
-  <div class="navbar-container main-menu-content">
-    <horizontal-nav-menu-items :items="navMenuItems" />
+  <div className="navbar-container main-menu-content">
+    <horizontal-nav-menu-items :items="navMenuItems"/>
   </div>
 </template>
 
 <script>
+import navbarMenu from "@/navigation/horizontal";
 import navMenuItems from '@/navigation/horizontal'
 import HorizontalNavMenuItems from './components/horizontal-nav-menu-items/HorizontalNavMenuItems.vue'
 
@@ -12,6 +13,7 @@ export default {
   components: {
     HorizontalNavMenuItems,
   },
+
   setup() {
     return {
       navMenuItems,

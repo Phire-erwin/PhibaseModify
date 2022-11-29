@@ -1,7 +1,7 @@
 <template>
   <div class="navbar-header d-xl-block d-none">
     <ul class="nav navbar-nav">
-      <li class="nav-item">
+      <li class="navv">
         <b-link
           class="navbar-brand"
           to="/"

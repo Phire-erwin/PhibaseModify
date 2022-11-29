@@ -13,8 +13,4 @@ export default {
       }
     }
   },
-  DELETE_USER: (state, payload) => {
-    let i = state.user.findIndex(u => u.id === payload)
-    state.user.splice(i, 1)
-  }
 }

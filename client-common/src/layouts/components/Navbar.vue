@@ -25,7 +25,7 @@
         type="password"
       />
      </b-form-group>
-     
+
      <b-form-group label="Password:" label-for="emailSettingForm-password">
       <b-form-input
         id="emailSettingForm-password"
@@ -172,7 +172,7 @@
             class="mr-50"
           />
           <span>Application</span>
-        </b-dropdown-item>      
+        </b-dropdown-item>
 
         <b-dropdown-item link-class="d-flex align-items-center" @click="logout">
           <feather-icon
@@ -183,7 +183,7 @@
           <span>Logout</span>
         </b-dropdown-item>
       </b-nav-item-dropdown>
-    </b-navbar-nav> 
+    </b-navbar-nav>
   </div>
 </template>
 
@@ -215,7 +215,7 @@ export default {
         outgoingName: "",
         displayName: "",
         props: {}
-      },
+      }
     }
   },
   props: {

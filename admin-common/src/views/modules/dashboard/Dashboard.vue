@@ -1,220 +1,313 @@
 <template>
   <div>
     <b-card-group deck>
-      <b-card>
-        <b-card-text>
-          <b-row>
-            <b-col cols="4" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <feather-icon
-                icon="SettingsIcon"
-                style="width:60px;height:80px;color:#662E9B;"
-              />
-            </b-col>
+      <b-col cols="12">
+        <b-row style="margin-bottom:10px" class="show-on-mobile">
+          <b-col>
+            <b-form-checkbox v-model="stackedStatus" value="md" unchecked-value=false>
+              Stacked Table
+            </b-form-checkbox>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-card title="Request Form">
+            <div style="overflow-x: visible;">
+              <b-table
+                  id="application-table"
+                  responsive
+                  :items="users"
+                  :per-page="perPage"
+                  :current-page="currentPage"
+                  :fields="fields"
+                  :sort-by.sync="sortBy"
+                  :sort-desc.sync="sortDesc"
+                  :filter="search"
+                  select-mode="multi"
+                  head-variant="dark"
+                  selectable
+                  hover
+                  small
+                  outlined
+                  :stacked=stackedStatus
+                  @row-selected="onRowSelected">
+                <template #cell(selected)="{ rowSelected }">
+                  <template v-if="rowSelected">
+                    <span aria-hidden="true">&check;</span>
+                    <span class="sr-only">Selected</span>
+                  </template>
+                  <template v-else>
+                    <span aria-hidden="true">&nbsp;</span>
+                    <span class="sr-only">Not selected</span>
+                  </template>
+                </template>
 
-            <b-col cols="8" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <div style="padding-top:15px; color:#662E9B;">
-                <span style="font-size:70px; font-weight:bold;">{{ roles.length }}</span>
-                <span class="font-weight-bold" style="font-size:16px;"> ROLES</span>
-              </div>
-            </b-col>
-          </b-row>
-        </b-card-text>
-      </b-card>
+                <template v-slot:cell(actions)="row">
+                  <div>
+                    <b-button size="sm" variant="success" style="margin-left:15px;" type="filled"
+                              @click="accept(row.item.id) ">
+                      Accept
+                    </b-button>
+                    <b-button size="sm" variant="danger" style="margin-left:15px;" type="filled"
+                              @click="reject(row.item.id)">
+                      Reject
+                    </b-button>
+                  </div>
+                </template>
+              </b-table>
+            </div>
+            <b-row>
+              <b-col cols="4" class="pt-1">
+                <b-form-group label="Data Per Page" label-for="per-page-select" label-cols-md="0" label-align-sm="left"
+                              label-size="md" class="mb-0">
+                  <b-form-select id="per-page-select" v-model="perPage" :options="pageOptions" size="sm">
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col class="pt-1">
+                <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" first-number last-number
+                              class="float-right" aria-controls="user-table"></b-pagination>
+              </b-col>
+            </b-row>
+          </b-card>
+        </b-row>
+      </b-col>
 
-      <b-card>
-        <b-card-text>
-          <b-row>
-            <b-col cols="4" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <feather-icon
-                icon="UsersIcon"
-                style="width:60px;height:80px;color:#F86624;"
-              />
-            </b-col>
-
-            <b-col cols="8" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <div style="padding-top:15px; color:#F86624;">
-                <span style="font-size:70px; font-weight:bold;">{{ users.length }}</span>
-                <span class="font-weight-bold" style="font-size:16px;"> USERS</span>
-              </div>
-            </b-col>
-          </b-row>
-        </b-card-text>
-      </b-card>
-
-      <b-card>
-        <b-card-text>
-          <b-row>
-            <b-col cols="4" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <feather-icon
-                icon="BoxIcon"
-                style="width:60px;height:80px;color:#EA3546;"
-              />
-            </b-col>
-
-            <b-col cols="8" class="d-flex flex-column h-auto justify-content-center align-items-center">
-              <div style="padding-top:15px; color:#EA3546;">
-                <span style="font-size:70px; font-weight:bold;">{{ items.length }}</span>
-                <span class="font-weight-bold" style="font-size:16px;"> ITEMS</span>
-              </div>
-            </b-col>
-          </b-row>
-        </b-card-text>
-      </b-card>
-    </b-card-group><br>
-
-    <b-card-group deck v-if="giveTime">
-      <b-card>
-        <apexchart height="450" :options="userChart.option" :series="userChart.series"></apexchart>
-      </b-card>
-
-      <b-card>
-        <b-card-text>
-          <div v-if="roleChart.series">
-            <apexchart height="500" :options="roleChart.option" :series="roleChart.series"></apexchart>
-          </div>
-        </b-card-text>
-      </b-card>
     </b-card-group>
   </div>
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts'
+import { dateFormat, userAccess, viewAccess } from '@/utils/utils.js';
+import vSelect from 'vue-select'
 
 export default {
   components: {
-    apexchart: VueApexCharts
+    vSelect
   },
   data() {
     return {
-      giveTime : false,
-
-      optionsrole: {
-        chart: {
-          height: 350,
-          type: 'bar',
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: true
-        },
-        colors:['#662E9B'],
-        stroke: {
-          curve: 'straight'
-        },
-        title: {
-          text: 'Role Distribution',
-          align: 'left'
-        },
-        grid: {
-          row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5
-          },
-        },
-        xaxis: {
-          categories: [],
-          position: 'bottom'
-        },
+      stackedStatus: "md",
+      showSpinner: false,
+      fields: [
+        { key: 'selected', label: '' },
+        { key: 'name', label: 'Name', filterable: true, sortable: true },
+        { key: 'email', label: 'Email', filterable: true, sortable: true },
+        { key: 'createdAtFormatted', label: 'Created At', filterable: true, sortable: true },
+        { key: 'actions', label: 'Actions' },
+      ],
+      //sort direction list
+      directions: [
+        { key: false, label: 'Asc', sortable: true },
+        { key: true, label: 'Desc', sortable: true },
+      ],
+      search: null,
+      promptAddEdit: false,
+      addEdit: '',
+      title: '',
+      pageOptions: [5, 10, 20, 100],
+      sortBy: '',
+      sortDesc: false,
+      form: {
+        name: '',
+        email: ''
       },
-
-      optionsuser: {
-        chart: {
-          height: 350,
-          type: 'line',
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: true
-        },
-        stroke: {
-          curve: 'straight'
-        },
-        title: {
-          text: 'Number of Registered Users by Date',
-          align: 'left'
-        },
-        grid: {
-          row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5
-          },
-        },
-        xaxis: {
-          categories: [],
-        }
-      },
+      // promptView: false,
+      promptDelete: false,
+      promptDeleteSelected: false,
+      deleteCounter: 0,
+      selected: [],
+      currentPage: 1,
+      perPage: 10,
     }
   },
   methods: {
+    // add spinner while loading on searching data process
+    debounceSearch(event) {
+      this.showSpinner = true
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.showSpinner = false
+        this.search = event.target.value
+      }, 600)
+    },
+
+    onRowSelected(items) {
+      this.selected = items
+    },
+    accept(id){
+      this.acceptId = id
+      this.$store
+          .dispatch('application/addApplication', {id: this.acceptId})
+          .then(() => {
+            this.$bvToast.toast('Accepted Application', {
+              title: 'Success',
+              variant: 'success',
+              solid: true,
+            })
+            this.selected = [];
+          })
+          .catch(error => {
+            console.log({ error })
+            this.$bvToast.toast(error.response.data.errors[0].message, {
+              title: 'Failed',
+              variant: 'danger',
+              solid: true,
+            })
+          })
+    },
+    reject(id){
+      this.rejectId = id
+      this.$store
+          .dispatch('application/deleteReqApplication', { id: this.rejectId })
+          .then(() => {
+            this.$bvToast.toast('Successfully Deleted Request Appllication', {
+              title: 'Success',
+              variant: 'success',
+              solid: true,
+            })
+            this.selected = [];
+          })
+          .catch(error => {
+            console.log({ error })
+            this.$bvToast.toast(error.response.data.errors[0].message, {
+              title: 'Failed',
+              variant: 'danger',
+              solid: true,
+            })
+          })
+    }
+    // viewUser(id) {
+    //   this.user = this.users.find(i => i.id === id);
+    //   this.form = {
+    //     ...this.user
+    //   }
+    //   this.promptView = true
+    // },
   },
   computed: {
+    permission() {
+      return userAccess('Dashboard')
+    },
+    home() {
+      return viewAccess()[0]
+    },
+    users() {
+      var getApplications = this.$store.getters['application/getReqApplication'] ? this.$store.getters['application/getReqApplication']
+          .map(el => {
+            return {
+              ...el,
+              createdAtFormatted: dateFormat(el.createdAt)
+            }
+          }) : []
+      return getApplications
+    },
+    rows() {
+      return this.users.length
+    },
     roles() {
-      var getRoles = this.$store.getters['role/getRole'] ? this.$store.getters['role/getRole'].filter(el => {
-        return el.name !== 'Super Admin'
+      var getRoles = this.$store.getters['role/getRole'] ? this.$store.getters['role/getRole'].filter(doc => {
+        return doc.name !== 'Super Admin' && doc.level !== 'Super Admin'
+      }).map(el => {
+        return {
+          ...el,
+          label: `${el.name} - ${el.level}`
+        }
       }) : []
       return getRoles
     },
-    users() {
-      var getUsers = this.$store.getters['user/getUser'] ? this.$store.getters['user/getUser'].filter(doc => {
-        return doc.role !== 'Super Admin'
-      }) : []
-      return getUsers
+    // Create an options list from our fields
+    sortOptions() {
+      return this.fields
+          .filter(f => f.sortable)
+          .map(f => {
+            return { text: f.label, value: f.key }
+          })
     },
-    items() {
-      var getItems = this.$store.getters['item/getItem'] ? this.$store.getters['item/getItem'] : []
-      return getItems
-    },
-    roleChart(){
-      let getRoleCounter = this.$store.getters['dashboard/getRoleCounter'];
-      this.optionsrole.xaxis.categories = getRoleCounter.role;
-      return {
-        series: [{
-          name: 'Roles',
-          data: getRoleCounter.total
-        }],
-        option: this.optionsrole
-      }
-    },
-    userChart(){
-      var getUserByDate = this.$store.getters['dashboard/getUserByDate'];
-      this.optionsuser.xaxis.categories = getUserByDate.date;
-      return {
-        series: [{
-          name: 'New Users',
-          data: getUserByDate.user
-        }],
-        option: this.optionsuser
-      }
+    // Create an direction list that can be saved in session
+    directionOptions() {
+      return this.directions
+          .filter(f => f.sortable)
+          .map(f => {
+            return { text: f.label, value: f.key }
+          })
     },
   },
   created() {
-    document.title = 'Dashboard | Phibase - Common'
+    document.title = 'Phibase - Admin'
   },
   mounted() {
     this.$store
-      .dispatch('role/fetchRole')
-      .catch(err => console.log(err))
+        .dispatch('user/fetchUser')
+        .catch(err => console.log(err))
     this.$store
-      .dispatch('user/fetchUser')
-      .catch(err => console.log(err))
+        .dispatch('role/fetchRole')
+        .catch(err => console.log(err))
     this.$store
-      .dispatch('item/fetchItem')
-      .catch(err => console.log(err))
-    this.$store
-      .dispatch('dashboard/fetchRoleCounter')
-      .catch(err => console.log(err))
-    this.$store
-      .dispatch('dashboard/fetchUserByDate')
-      .catch(err => console.log(err))
+        .dispatch('application/getReqApplication')
+        .catch(err => console.error(err))
 
-    setTimeout(()=>{
-      this.giveTime = true;
-    }, 300);
+    // Saving Menu Setting on localstorage session so it still same even after reloading the page
+    if (this.$session.has("perPageUserCommon")) {
+      this.perPage = this.$session.get("perPageUserCommon")
+    }
+    if (this.$session.has("sortByUserCommon")) {
+      this.sortBy = this.$session.get("sortByUserCommon")
+    }
+    if (this.$session.has("sortDescUserCommon")) {
+      this.sortDesc = this.$session.get("sortDescUserCommon")
+    }
+    // if (this.$session.has("stackedStatusUserCommon")) {
+    //   this.stackedStatus = this.$session.get("stackedStatusUserCommon")
+    // }
+  },
+
+  watch: {
+    // Taking the Menu Setting from localstorage session so the setting will be the same as before
+    perPage(perPageNew) {
+      this.$session.set("perPageUserCommon", perPageNew)
+    },
+    sortBy(sortByNew) {
+      this.$session.set("sortByUserCommon", sortByNew)
+    },
+    sortDesc(sortDescNew) {
+      this.$session.set("sortDescUserCommon", sortDescNew)
+    },
+    // stackedStatus(stackedStatusNew) {
+    //   this.$session.set("stackedStatusUserCommon", stackedStatusNew)
+    // }
   },
 }
 </script>
+
+<style>
+@media (min-width: 761px) {
+  .show-on-mobile {
+    display: none !important;
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
+}
+
+.spin::before {
+  animation: 1.5s linear infinite spinner;
+  animation-play-state: inherit;
+  border: solid 5px #cfd0d1;
+  border-bottom-color: #0077B3;
+  border-radius: 50%;
+  content: "";
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  margin-top: 20px;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+}
+</style>

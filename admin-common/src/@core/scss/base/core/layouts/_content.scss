@@ -27,7 +27,7 @@ html {
     transition: 300ms ease all;
     backface-visibility: hidden;
     min-height: calc(100% - #{$footer-height});
-    margin-left: $menu-expanded-width;
+    margin-left: 0px;
     &.app-content {
       padding: calc(
           #{$content-padding} + #{$navbar-height} + #{$floating-nav-margin}

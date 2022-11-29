@@ -61,8 +61,6 @@
           v-slot:[name]="data"
         >
           <slot
-            :name="name"
-            v-bind="data"
           />
         </template>
       </component>

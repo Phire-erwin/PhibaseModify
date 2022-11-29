@@ -1,3 +1,17 @@
+<style>
+.link-item{
+  transition: 300ms;
+}
+
+.link-item:hover {
+  color: #00cfe8;
+}
+
+.active-menu{
+  color: #00cfe8
+}
+</style>
+
 <template>
   <div class="navbar-container d-flex content align-items-center">
 
@@ -25,7 +39,7 @@
         type="password"
       />
      </b-form-group>
-     
+
      <b-form-group label="Password:" label-for="emailSettingForm-password">
       <b-form-input
         id="emailSettingForm-password"
@@ -92,33 +106,13 @@
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
       <!-- <dark-Toggler class="d-none d-lg-block" /> -->
 
-      <a href="http://phibase.io" target="_blank" title="Homepage">
-        <feather-icon icon="HomeIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
+      <a @click="goToRequestForm" title="Request List" class="nav-item">
+<!--         :class="{ '': !isActive || 'active-menu': isActive }">-->
+        <p style="min-width: 100px; height: 20px; margin: 0px 10px; font-weight: bold; font-size: 15px" class="link-item">
+          Request Form
+        </p>
       </a>
 
-      <a title="Common">
-        <feather-icon icon="UsersIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
-
-      <a href="http://phibase.io/commerce" target="_blank" title="Commerce">
-        <feather-icon icon="ShoppingCartIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
-
-      <a href="http://phibase.io/manufacturing" target="_blank" title="Manufacture">
-        <feather-icon icon="ToolIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
-
-      <a href="http://phibase.io/quality-control" target="_blank" title="Quality Control">
-        <feather-icon icon="EyeIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
-
-      <a href="http://phibase.io/distribution" target="_blank" title="Distribution">
-        <feather-icon icon="TruckIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
-
-      <a href="http://phibase.io/planner" target="_blank" title="Planner">
-        <feather-icon icon="CalendarIcon" style="width: 20px; height: 20px; margin: 0px 10px;"/>
-      </a>
     </div>
 
      <b-navbar-nav class="nav align-items-center ml-auto">
@@ -130,24 +124,13 @@
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
             <p class="user-name font-weight-bolder mb-0">
-              {{ name !== '' ? name : user.email }}
+              {{ user.email }}
             </p>
             <small>{{ user.role }}</small>
           </div>
           <b-img src="@/assets/images/logo.png" alt="img" height="35" rounded="circle" />
         </template>
 
-        <b-dropdown-item
-          link-class="d-flex align-items-center"
-          @click="clickSMTPSetting"
-        >
-          <feather-icon
-            size="16"
-            icon="MailIcon"
-            class="mr-50"
-          />
-          <span>SMTP Setting</span>
-        </b-dropdown-item>
         <b-dropdown-item link-class="d-flex align-items-center" @click="goToProfile">
           <feather-icon
             size="16"
@@ -165,14 +148,6 @@
           />
           <span>Password</span>
         </b-dropdown-item>
-        <b-dropdown-item link-class="d-flex align-items-center" @click="goToApplication">
-          <feather-icon
-            size="16"
-            icon="SettingsIcon"
-            class="mr-50"
-          />
-          <span>Application</span>
-        </b-dropdown-item>      
 
         <b-dropdown-item link-class="d-flex align-items-center" @click="logout">
           <feather-icon
@@ -183,7 +158,7 @@
           <span>Logout</span>
         </b-dropdown-item>
       </b-nav-item-dropdown>
-    </b-navbar-nav> 
+    </b-navbar-nav>
   </div>
 </template>
 
@@ -193,6 +168,10 @@ import {
 } from 'bootstrap-vue'
 import axios from "@/axios";
 import router from '@/router/index.js'
+import useHorizontalNavMenuLink
+  from "@core/layouts/layout-horizontal/components/horizontal-nav-menu/components/horizontal-nav-menu-link/useHorizontalNavMenuLink";
+
+
 
 export default {
   components: {
@@ -232,13 +211,13 @@ export default {
 
       axios
         .post("/common/settingSMTP", this.emailSettingForm)
-        .then(() => {        
+        .then(() => {
           this.$bvToast.toast("Successfully Setting SMTP", {
             title: "Success",
             variant: "success",
             solid: true,
           });
-          
+
           ///if success
           this.resetForm()
           this.promptEmailSetting = false
@@ -251,7 +230,7 @@ export default {
             solid: true,
           });
         });
-      
+
     },
     resetForm(){
       this.emailSettingForm.email = ""
@@ -264,17 +243,22 @@ export default {
     clickSMTPSetting(){
       axios
         .get(`/common/settingSMTP/${router.app.$session.get('phibase-app')}`)
-        .then((res) => {        
+        .then((res) => {
         this.emailSettingForm.email =  res.data.email
         this.emailSettingForm.port =  res.data.port
         this.emailSettingForm.outgoingName =  res.data.outgoingName
-        this.emailSettingForm.displayName =  res.data.displayName  
-        this.emailSettingForm.props =  res.data.props  
+        this.emailSettingForm.displayName =  res.data.displayName
+        this.emailSettingForm.props =  res.data.props
         })
         .catch((err) => console.log({ err }));
-        
+
       this.promptEmailSetting = true
     },
+
+    goToRequestForm() {
+      this.$router.push({name: 'dashboard'});
+    },
+
     goToProfile() {
       this.$router.push({name: 'profile'});
     },
@@ -282,6 +266,7 @@ export default {
     goToChangePassword() {
       this.$router.push({name: 'change-password'});
     },
+
     goToApplication() {
       this.$router.push({name: 'application'});
     },
@@ -309,6 +294,6 @@ export default {
     this.$store
       .dispatch('auth/fetchUser')
       .catch(err => console.log(err))
-  }
+  },
 }
 </script>

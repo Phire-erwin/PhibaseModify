@@ -73,9 +73,9 @@
         }
       }
       //Content expanded
-      .footer {
-        @include main-menu-width($menu-expanded-width);
-      }
+      //.footer {
+      //  @include main-menu-width($menu-expanded-width);
+      //}
     }
     //Vertical menu [Collapsed]
     &.menu-collapsed {
@@ -176,8 +176,7 @@
         }
       }
       //Brand center content collapsed
-      .app-content,
-      .footer {
+      .app-content{
         @include main-menu-width($menu-collapsed-width);
       }
       .header-navbar {

@@ -22,27 +22,28 @@
     </b-navbar>
     <!--/ Navbar -->
 
-    <!-- Vertical Nav Menu -->
-    <vertical-nav-menu
-      v-if="!isNavMenuHidden"
-      :is-vertical-menu-active="isVerticalMenuActive"
-      :toggle-vertical-menu-active="toggleVerticalMenuActive"
-    >
-      <template #header="slotProps">
-        <slot
-          name="vertical-menu-header"
-          v-bind="slotProps"
-        />
-      </template>
-    </vertical-nav-menu>
-    <!-- /Vertical Nav Menu -->
+<!--     Vertical Nav Menu-->
+<!--    <vertical-nav-menu-->
+<!--      v-if="!isNavMenuHidden"-->
+<!--      :is-vertical-menu-active="isVerticalMenuActive"-->
+<!--      :toggle-vertical-menu-active="toggleVerticalMenuActive"-->
+<!--    >-->
+<!--      <template #header="slotProps">-->
+<!--        <slot-->
+<!--          name="vertical-menu-header"-->
+<!--          v-bind="slotProps"-->
+<!--        />-->
+<!--      </template>-->
+<!--    </vertical-nav-menu>-->
+<!--     /Vertical Nav Menu-->
 
-    <!-- Vertical Nav Menu Overlay -->
-    <div
-      class="sidenav-overlay"
-      :class="overlayClasses"
-      @click="isVerticalMenuActive = false"
-    />
+<!--     Vertical Nav Menu Overlay-->
+<!--    <div-->
+<!--      class="sidenav-overlay"-->
+<!--      :class="overlayClasses"-->
+<!--      @click="isVerticalMenuActive = false"-->
+<!--    />-->
+
     <!-- /Vertical Nav Menu Overlay -->
 
     <!-- Content -->
