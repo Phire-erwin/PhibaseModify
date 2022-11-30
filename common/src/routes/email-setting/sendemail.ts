@@ -30,7 +30,7 @@ router.post(
         pass: decryptPassword,
       },
     }
-     
+
     if (!req.body.email) {
         throw new BadRequestError(`There is no Email`);
     }

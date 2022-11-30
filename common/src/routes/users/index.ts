@@ -5,7 +5,7 @@ import { User } from '../../models/user';
 const router = express.Router();
 
 router.get('/api/v1/common/users/:app',
-  requireAuth,
+  // requireAuth,
   async (req: Request, res: Response) => {
   const users = await User.find({"props.app": req.params.app}).populate('roleRef');
 

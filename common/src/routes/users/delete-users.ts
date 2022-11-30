@@ -13,13 +13,13 @@ router.delete(
 
     for (let data of users) {
       // Publisher
-      new UserDeletedPublisher(natsWrapper.client).publish({
-        id      : data.id,
-        version : -1,
-        email   : data.email,
-        role    : data.role,
-        props   : data.props,
-      })
+      // new UserDeletedPublisher(natsWrapper.client).publish({
+      //   id      : data.id,
+      //   version : -1,
+      //   email   : data.email,
+      //   role    : data.role,
+      //   props   : data.props,
+      // })
 
       await data.remove();
     }

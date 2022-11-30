@@ -1,14 +1,22 @@
 <style>
 .link-item{
   transition: 300ms;
+  text-align: center;
+  min-width: 100px;
+  height: 20px;
+  margin: 0px 10px;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .link-item:hover {
   color: #00cfe8;
+  font-size: 20px;
+  text-shadow: 0 0 2px #00cfe8;
 }
 
 .active-menu{
-  color: #00cfe8
+  color: #00cfe8;
 }
 </style>
 
@@ -87,29 +95,32 @@
         </b-button>
       </template>
   </b-modal>
-    <!-- Nav Menu Toggler -->
-    <ul class="nav navbar-nav d-xl-none">
-      <li class="nav-item">
-        <b-link
-          class="nav-link"
-          @click="toggleVerticalMenuActive"
-        >
-          <feather-icon
-            icon="MenuIcon"
-            size="21"
-          />
-        </b-link>
-      </li>
-    </ul>
 
     <!-- Left Col -->
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
       <!-- <dark-Toggler class="d-none d-lg-block" /> -->
 
-      <a @click="goToRequestForm" title="Request List" class="nav-item">
+      <a @click="goToRequestForm" title="Request From">
 <!--         :class="{ '': !isActive || 'active-menu': isActive }">-->
-        <p style="min-width: 100px; height: 20px; margin: 0px 10px; font-weight: bold; font-size: 15px" class="link-item">
+        <p class="link-item"
+          :class="{ 'active-menu' : currentRouteName == 'request-form' }">
           Request Form
+        </p>
+      </a>
+
+      <a @click="goToAcceptForm" title="Accept Form">
+        <!--         :class="{ '': !isActive || 'active-menu': isActive }">-->
+        <p class="link-item"
+           :class="{ 'active-menu' : currentRouteName == 'accept-form' }">
+          Accept Form
+        </p>
+      </a>
+
+      <a @click="goToRejectForm" title="Reject Form">
+        <!--         :class="{ '': !isActive || 'active-menu': isActive }">-->
+        <p class="link-item"
+           :class="{ 'active-menu' : currentRouteName == 'reject-form' }">
+          Reject Form
         </p>
       </a>
 
@@ -163,6 +174,7 @@
 </template>
 
 <script>
+
 import {
   BLink, BNavbarNav, BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
@@ -195,13 +207,11 @@ export default {
         displayName: "",
         props: {}
       },
+      styleObject: {
+        color: 'blue',
+        fontSize: '20px'
+      },
     }
-  },
-  props: {
-    toggleVerticalMenuActive: {
-      type: Function,
-      default: () => {},
-    },
   },
   methods: {
     saveEmailSetting(){
@@ -256,7 +266,15 @@ export default {
     },
 
     goToRequestForm() {
-      this.$router.push({name: 'dashboard'});
+      this.$router.push({name: 'request-form'});
+    },
+
+    goToAcceptForm() {
+      this.$router.push({name: 'accept-form'});
+    },
+
+    goToRejectForm() {
+      this.$router.push({name: 'reject-form'});
     },
 
     goToProfile() {
@@ -267,10 +285,6 @@ export default {
       this.$router.push({name: 'change-password'});
     },
 
-    goToApplication() {
-      this.$router.push({name: 'application'});
-    },
-
     logout() {
       this.$session.clear()
       this.$session.destroy()
@@ -279,6 +293,12 @@ export default {
     },
   },
   computed: {
+
+    currentRouteName() {
+      var routeName = this.$route.name
+      return routeName;
+    },
+
     user() {
       var getUser = this.$store.getters['auth/getActiveUser'];
 

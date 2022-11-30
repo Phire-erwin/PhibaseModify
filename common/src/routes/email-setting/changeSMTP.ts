@@ -11,6 +11,7 @@ router.post(
   async (req: Request, res: Response) => {
     const existingSMTP = await EmailSetting.find({ "props.app": req.body.props.app })
     
+    console.log(existingSMTP)
     if(existingSMTP.length>0){
       let source = {
         iv : "",

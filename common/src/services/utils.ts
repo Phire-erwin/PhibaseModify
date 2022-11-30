@@ -21,7 +21,7 @@ export class Utils {
     }
     return result;
   }
-
+ 
   static async sendEmail(options: any) {
     if (!process.env.SMTP_HOST) {
       throw new Error('SMTP_HOST must be defined!');
@@ -73,7 +73,7 @@ export class Utils {
     };
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) throw err;
-      console.log('Email sent: ' + info.response);
+        console.log('Email sent: ' + info.response);
     });
   }
   static async sendEmailAdminReject(options: any){
@@ -89,11 +89,11 @@ export class Utils {
       replyTo: 'noreply.erwin@trillium-tech.com',
       to: options.to,
       subject: 'Application has Reject',
-      text: 'Application has been Rejected. Please contact admin for more informations'
+      text: options.text
     };
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) throw err;
-      console.log('Email sent: ' + info.response);
+        console.log('Email sent: ' + info.response);
     });
   }
 }

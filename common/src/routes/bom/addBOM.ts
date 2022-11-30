@@ -73,14 +73,14 @@ router.post(
         )
         bomData.props.components[i].id=componentData.id;
         
-        await new ItemCreatedPublisher(natsWrapper.client).publish({
-          id:componentData.id,
-          version:0,
-          name:componentData.name,
-          domain:componentData.domain[0],
-          app:componentData.app,
-          props:componentData.props
-        })
+        // await new ItemCreatedPublisher(natsWrapper.client).publish({
+        //   id:componentData.id,
+        //   version:0,
+        //   name:componentData.name,
+        //   domain:componentData.domain[0],
+        //   app:componentData.app,
+        //   props:componentData.props
+        // })
         
         continue;
       }
@@ -99,14 +99,14 @@ router.post(
       await item.save();
 
       
-      await new ItemCreatedPublisher(natsWrapper.client).publish({
-        id:item.id,
-        version:0,
-        name:item.name,
-        domain:item.domain[0],
-        app:item.app,
-        props:item.props
-      })
+      // await new ItemCreatedPublisher(natsWrapper.client).publish({
+      //   id:item.id,
+      //   version:0,
+      //   name:item.name,
+      //   domain:item.domain[0],
+      //   app:item.app,
+      //   props:item.props
+      // })
       
       /*
       await Item.populate(item,'props.components.id')

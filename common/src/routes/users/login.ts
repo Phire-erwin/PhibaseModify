@@ -8,6 +8,7 @@ import { validateRequest, BadRequestError, NotFoundError } from '@phibase/common
 import { UserLoginPublisher } from '../../events/publishers/user-login-publisher'
 import { natsWrapper } from '../../nats-wrapper';
 import { Application } from '../../models/application';
+import { Admin } from '../../models/admin';
 
 const router = express.Router();
 
@@ -27,25 +28,24 @@ router.post(
     const {
       email,
       password,
+      app
     } = req.body;
+    
+    const application= await Application.findOne({appID:app});
+    if(!application){
+      throw new BadRequestError('Application data not found')
+    }
 
-    // const application= await Application.findOne({appID:app});
-    //
-    // if(!application){
-    //   throw new BadRequestError('Application data not found')
-    // }
-
-    const existingUser = await User.findOne({ email }).populate('roleRef')
-
+    const existingUser = await User.findOne({ email, "props.app":app}).populate('roleRef')
     if (!existingUser) {
       throw new NotFoundError();
     }
-
-    const passwordsMatch = await Password.compare(
+    
+    const passwordsMatch: boolean = await Password.compare(
       existingUser.password,
-      password,
+      password
     );
-
+    
     if (!passwordsMatch) {
       throw new BadRequestError('Invalid credentials.');
     }
@@ -73,7 +73,8 @@ router.post(
     //   email   : existingUser.email,
     //   role    : existingUser.role,
     //   props   : existingUser.props,
-    // })
+    // });
+    // console.log(UserLoginPublisher)
 
     res.status(200)
       .send({

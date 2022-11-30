@@ -26,7 +26,6 @@ router.get(
     try {
       application = await Application.findById(req.params.id);
       
-      console.log('query ',req.query);
       var userKey=req.query.userKey?.toString();
       if(application?.props.keyRequired){
         if(!userKey){

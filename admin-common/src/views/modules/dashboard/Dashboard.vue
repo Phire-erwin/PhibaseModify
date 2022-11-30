@@ -1,5 +1,53 @@
 <template>
   <div>
+
+    <!-- Form Register -->
+    <b-modal
+        id="promptApp"
+        ref="modal"
+        v-model="promptReason"
+        title="Kasih Pesan Dong Kenapa di Reject"
+        header-bg-variant="light">
+
+      <validation-observer>
+        <b-form-group
+            label="Kenapa saya ditolak kakak (╥﹏╥)"
+            label-for="form_note">
+          <validation-provider
+              #default="{ errors }"
+              name="note"
+              rules="required">
+            <b-form-input
+                id="form_note"
+                tabindex="3"
+                v-model="formNote"
+                :state="errors.length>0 ? false:null"
+                name="form_note"
+                placeholder="karna kamu jelek"
+            />
+            <small class="text-danger">{{ errors[0] }}</small>
+          </validation-provider>
+        </b-form-group>
+
+      </validation-observer>
+      <template #modal-footer>
+        <b-button
+            size="md"
+            variant="success"
+            @click="rejectConfirm()"
+        >
+          Confirm
+        </b-button>
+        <b-button
+            size="md"
+            variant="danger"
+            @click="promptReason=false"
+        >
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
+
     <b-card-group deck>
       <b-col cols="12">
         <b-row style="margin-bottom:10px" class="show-on-mobile">
@@ -10,26 +58,26 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-card title="Request Form">
+          <b-card title="Request Application">
             <div style="overflow-x: visible;">
-              <b-table
-                  id="application-table"
-                  responsive
-                  :items="users"
-                  :per-page="perPage"
-                  :current-page="currentPage"
-                  :fields="fields"
-                  :sort-by.sync="sortBy"
-                  :sort-desc.sync="sortDesc"
-                  :filter="search"
-                  select-mode="multi"
-                  head-variant="dark"
-                  selectable
-                  hover
-                  small
-                  outlined
-                  :stacked=stackedStatus
-                  @row-selected="onRowSelected">
+              <b-table 
+                id="application-table"
+                responsive 
+                :items="users" 
+                :per-page="perPage" 
+                :current-page="currentPage"
+                :fields="fields" 
+                :sort-by.sync="sortBy" 
+                :sort-desc.sync="sortDesc" 
+                :filter="search" 
+                select-mode="multi"
+                head-variant="dark" 
+                selectable 
+                hover 
+                small 
+                outlined 
+                :stacked=stackedStatus
+                @row-selected="onRowSelected">
                 <template #cell(selected)="{ rowSelected }">
                   <template v-if="rowSelected">
                     <span aria-hidden="true">&check;</span>
@@ -44,11 +92,11 @@
                 <template v-slot:cell(actions)="row">
                   <div>
                     <b-button size="sm" variant="success" style="margin-left:15px;" type="filled"
-                              @click="accept(row.item.id) ">
+                      @click="accept(row.item.id) ">
                       Accept
                     </b-button>
                     <b-button size="sm" variant="danger" style="margin-left:15px;" type="filled"
-                              @click="reject(row.item.id)">
+                      @click="(reject(row.item.id))">
                       Reject
                     </b-button>
                   </div>
@@ -58,14 +106,14 @@
             <b-row>
               <b-col cols="4" class="pt-1">
                 <b-form-group label="Data Per Page" label-for="per-page-select" label-cols-md="0" label-align-sm="left"
-                              label-size="md" class="mb-0">
+                  label-size="md" class="mb-0">
                   <b-form-select id="per-page-select" v-model="perPage" :options="pageOptions" size="sm">
                   </b-form-select>
                 </b-form-group>
               </b-col>
               <b-col class="pt-1">
                 <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" first-number last-number
-                              class="float-right" aria-controls="user-table"></b-pagination>
+                  class="float-right" aria-controls="user-table"></b-pagination>
               </b-col>
             </b-row>
           </b-card>
@@ -79,9 +127,13 @@
 <script>
 import { dateFormat, userAccess, viewAccess } from '@/utils/utils.js';
 import vSelect from 'vue-select'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { required, email } from '@validations'
 
 export default {
   components: {
+    ValidationProvider,
+    ValidationObserver,
     vSelect
   },
   data() {
@@ -92,7 +144,7 @@ export default {
         { key: 'selected', label: '' },
         { key: 'name', label: 'Name', filterable: true, sortable: true },
         { key: 'email', label: 'Email', filterable: true, sortable: true },
-        { key: 'createdAtFormatted', label: 'Created At', filterable: true, sortable: true },
+        { key: 'createdAtFormatted', label: 'Request At', filterable: true, sortable: true },
         { key: 'actions', label: 'Actions' },
       ],
       //sort direction list
@@ -107,11 +159,11 @@ export default {
       pageOptions: [5, 10, 20, 100],
       sortBy: '',
       sortDesc: false,
-      form: {
-        name: '',
-        email: ''
-      },
+
       // promptView: false,
+      required,
+      formNote: '',
+      promptReason:false,
       promptDelete: false,
       promptDeleteSelected: false,
       deleteCounter: 0,
@@ -137,44 +189,60 @@ export default {
     accept(id){
       this.acceptId = id
       this.$store
-          .dispatch('application/addApplication', {id: this.acceptId})
-          .then(() => {
-            this.$bvToast.toast('Accepted Application', {
-              title: 'Success',
-              variant: 'success',
-              solid: true,
-            })
-            this.selected = [];
+        .dispatch('application/addApplication', 
+          {
+            id: this.acceptId
           })
-          .catch(error => {
-            console.log({ error })
-            this.$bvToast.toast(error.response.data.errors[0].message, {
-              title: 'Failed',
-              variant: 'danger',
-              solid: true,
+        .then(() => {
+          this.$store
+            .dispatch('application/approvedReqApplication',{
+              id: this.acceptId, 
+              email: this.admin.email, 
             })
+          this.$bvToast.toast('Accepted Application', {
+            title: 'Success',
+            variant: 'success',
+            solid: true,
           })
+        this.selected = [];
+        })
+        .catch(error => {
+          console.log({ error })
+          this.$bvToast.toast(error.response.data.errors[0].message, {
+            title: 'Failed',
+            variant: 'danger',
+            solid: true,
+          })
+        })
     },
     reject(id){
       this.rejectId = id
+      this.promptReason = true
+    },
+    rejectConfirm(){
+      this.promptReason = false
       this.$store
-          .dispatch('application/deleteReqApplication', { id: this.rejectId })
-          .then(() => {
-            this.$bvToast.toast('Successfully Deleted Request Appllication', {
-              title: 'Success',
-              variant: 'success',
-              solid: true,
-            })
-            this.selected = [];
+        .dispatch('application/rejectedReqApplication', {
+          id: this.rejectId, 
+          email: this.admin.email,
+          reason: this.formNote,
+        })
+        .then(() => {
+          this.$bvToast.toast('Successfully Rejected Request Appllication', {
+            title: 'Success',
+            variant: 'success',
+            solid: true,
           })
-          .catch(error => {
-            console.log({ error })
-            this.$bvToast.toast(error.response.data.errors[0].message, {
-              title: 'Failed',
-              variant: 'danger',
-              solid: true,
-            })
+          this.selected = [];
+        })
+        .catch(error => {
+          console.log({ error })
+          this.$bvToast.toast(error.response.data.errors[0].message, {
+            title: 'Failed',
+            variant: 'danger',
+            solid: true,
           })
+        })
     }
     // viewUser(id) {
     //   this.user = this.users.find(i => i.id === id);
@@ -191,14 +259,27 @@ export default {
     home() {
       return viewAccess()[0]
     },
+    admin() {
+      var getUser = this.$store.getters['auth/getActiveUser'];
+
+      var firstName = getUser.props ? getUser.props.firstName ? getUser.props.firstName : '' : '';
+      var lastName = getUser.props ? getUser.props.lastName ? getUser.props.lastName : '' : '';
+
+      this.name = (`${firstName} ${lastName}`).trim();
+
+      return getUser
+    },
     users() {
       var getApplications = this.$store.getters['application/getReqApplication'] ? this.$store.getters['application/getReqApplication']
-          .map(el => {
-            return {
-              ...el,
-              createdAtFormatted: dateFormat(el.createdAt)
-            }
-          }) : []
+        .filter(doc => {
+          return doc.status === 'Pending'
+        })
+        .map(el => {
+          return {
+            ...el,
+            createdAtFormatted: dateFormat(el.createdAt)
+          }
+        }) : []
       return getApplications
     },
     rows() {
@@ -218,34 +299,35 @@ export default {
     // Create an options list from our fields
     sortOptions() {
       return this.fields
-          .filter(f => f.sortable)
-          .map(f => {
-            return { text: f.label, value: f.key }
-          })
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key }
+        })
     },
     // Create an direction list that can be saved in session
     directionOptions() {
       return this.directions
-          .filter(f => f.sortable)
-          .map(f => {
-            return { text: f.label, value: f.key }
-          })
+        .filter(f => f.sortable)
+        .map(f => {
+          return { text: f.label, value: f.key }
+        })
     },
   },
   created() {
-    document.title = 'Phibase - Admin'
+    document.title = 'User | Phibase - Common'
   },
   mounted() {
     this.$store
-        .dispatch('user/fetchUser')
-        .catch(err => console.log(err))
+      .dispatch('user/fetchUser')
+      .catch(err => console.log(err))
     this.$store
-        .dispatch('role/fetchRole')
-        .catch(err => console.log(err))
+      .dispatch('role/fetchRole')
+      .catch(err => console.log(err))
     this.$store
-        .dispatch('application/getReqApplication')
-        .catch(err => console.error(err))
-
+      .dispatch('application/getReqApplication')
+      .catch(err => console.error(err))
+    
+      
     // Saving Menu Setting on localstorage session so it still same even after reloading the page
     if (this.$session.has("perPageUserCommon")) {
       this.perPage = this.$session.get("perPageUserCommon")

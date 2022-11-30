@@ -8,6 +8,14 @@ export default {
   UPDATE_APPLICATION: (state, payload) => {
     state.curApplication = payload
   },
+  UPDATE_REQAPPLICATION: (state, payload) => {
+    let user = state.reqApplication.find(u => u.id === payload.id)
+    for (let [key, value] of Object.entries(payload)) {
+      if (user[key] && user[key] !== value) {
+        user[key] = value
+      }
+    }
+  },
   GET_APPLICATION: (state, payload) => {
     state.reqApplication = payload
   },

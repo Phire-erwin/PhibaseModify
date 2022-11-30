@@ -76,14 +76,14 @@ router.put(
       throw new BadRequestError("failed item update")
     }
 
-    await new ItemUpdatedPublisher(natsWrapper.client).publish({
-      id:item.id,
-      version:1,
-      name:item.name,
-      domain:item.domain[0],
-      app:item.app,
-      props:item.props
-    })
+    // await new ItemUpdatedPublisher(natsWrapper.client).publish({
+    //   id:item.id,
+    //   version:1,
+    //   name:item.name,
+    //   domain:item.domain[0],
+    //   app:item.app,
+    //   props:item.props
+    // })
 
     res.status(200).send({data:item});
   },

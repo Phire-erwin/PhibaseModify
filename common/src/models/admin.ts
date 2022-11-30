@@ -20,7 +20,7 @@ interface AdminModel extends mongoose.Model<AdminDoc> {
 interface AdminDoc extends mongoose.Document {
     email     : string;
     password  : string;
-    appID     : string;
+    appID     : string; 
     updatedAt : Date;
 }
 
@@ -45,12 +45,12 @@ const AdminSchema = new mongoose.Schema(
         }
     },
     {
-        toJSON: {
-            transform(doc, ret) {
-                ret.id = ret._id;
-                delete ret._id;
-                delete ret.password;
-                delete ret.__v;
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.password;
+            delete ret.__v;
             },
         },
     },
@@ -70,7 +70,7 @@ AdminSchema.pre('save', async function (done) {
 
     //     this.set('appID', appID);
     // }
-
+    
     if (this.isModified('password')) {
         const hashed = await Password.toHash(this.get('password'));
         this.set('password', hashed);
@@ -79,8 +79,8 @@ AdminSchema.pre('save', async function (done) {
 });
 
 AdminSchema.statics.build = (attrs: AdminAttrs) => {
-    return new Admin(attrs);
-};
+        return new Admin(attrs);
+    };
 
 const Admin = mongoose.model<AdminDoc, AdminModel>('Admin', AdminSchema);
 

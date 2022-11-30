@@ -78,13 +78,13 @@ router.post(
     };
 
     // Publisher
-    new UserCreatedPublisher(natsWrapper.client).publish({
-      id      : user.id,
-      version : -1,
-      email   : user.email,
-      role    : user.role,
-      props   : user.props,
-    })
+    // new UserCreatedPublisher(natsWrapper.client).publish({
+    //   id      : user.id,
+    //   version : -1,
+    //   email   : user.email,
+    //   role    : user.role,
+    //   props   : user.props,
+    // })
 
     res.status(201)
       .send({

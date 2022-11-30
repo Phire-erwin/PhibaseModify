@@ -46,7 +46,6 @@ router.put(
     } catch (err) {
       throw new BadRequestError("failed application update")
     }
-
     res.status(200).send({data:publicKey});
 
   },

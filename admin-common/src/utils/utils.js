@@ -52,7 +52,7 @@ const viewAccess = () => {
   var permission = domainPermission('Common')
 
   if (permission.allAccess) {
-    return ['dashboard', 'item', 'role', 'user']
+    return ['request-form']
   } else {
     return permission.menu.filter(el => {
       return el.view;

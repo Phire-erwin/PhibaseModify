@@ -1,6 +1,8 @@
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
 
+import { decrypt } from './cryptoController'
+
 const scryptAsync = promisify(scrypt);
 
 export class Key {

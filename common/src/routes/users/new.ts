@@ -16,10 +16,12 @@ router.post(
     body('password')
       .trim()
       .notEmpty()
-      .isLength({ min: 6, max: 20 }).withMessage('Password must be between 6 and 20 characters')
+      .isLength({ min: 6, max: 20 }).withMessage('Password must be between 6 and 20 characters'),
+    body('roleRef')
+      .notEmpty().isObject().withMessage('Role must be valid')
   ],
   validateRequest,
-  requireAuth,
+  // requireAuth,
   async (req: Request, res: Response) => {
     const {
       email,
@@ -28,6 +30,10 @@ router.post(
       props
     } = req.body;
 
+    if(roleRef.name === undefined || roleRef.id === undefined){
+      throw new BadRequestError('Role must be valid. Select the Role !!!');
+    }
+    
     // Check existing user
     const existingUser = await User.findOne({ email, "props.app": props.app })
 
@@ -48,13 +54,13 @@ router.post(
     await user.save();
 
     // Publisher
-    new UserCreatedPublisher(natsWrapper.client).publish({
-      id      : user.id,
-      version : -1,
-      email   : user.email,
-      role    : user.role,
-      props   : user.props,
-    })
+    // new UserCreatedPublisher(natsWrapper.client).publish({
+    //   id      : user.id,
+    //   version : -1,
+    //   email   : user.email,
+    //   role    : user.role,
+    //   props   : user.props,
+    // })
 
     res.status(201).send(user);
   },

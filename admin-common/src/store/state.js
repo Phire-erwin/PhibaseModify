@@ -71,17 +71,11 @@ const is_touch_device = () => {
 const state = {
   AppActiveUser: getUserInfo(),
   bodyOverlay: false,
-  isVerticalNavMenuActive: true,
   is_touch_device: is_touch_device(),
   mainLayoutType: 'vertical',
   navbarSearchAndPinList,
-  // reduceButton            : themeConfig.sidebarCollapsed,
-  verticalNavMenuWidth: 'default',
-  verticalNavMenuItemsMin: false,
   scrollY: 0,
   starredPages: navbarSearchAndPinList.pages.data.filter(page => page.is_bookmarked),
-  // theme                   : themeConfig.theme || 'light',
-  // themePrimaryColor       : colors.primary,
 
   // Can be used to get current window with
   // Note: Above breakpoint state is for internal use of sidebar & navbar component

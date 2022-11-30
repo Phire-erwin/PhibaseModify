@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import { errorHandler, NotFoundError } from '@phibase/common-v2';
 
 //security
-const xss =require('xss-clean');
+const xss = require('xss-clean');
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -78,6 +78,8 @@ if (process.env.NODE_ENV === 'production') {
 app.use(hpp());
 
 /** Enabling CORS */
-app.use(cors()); // Disable if not needed
+app.use(cors({
+  origin: '*'
+})); // Disable if not needed
 
 export { app };

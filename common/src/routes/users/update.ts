@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.put(
   '/api/v1/common/users/:id',
-  requireAuth,
+  // requireAuth,
   async (req: Request, res: Response) => {
     const {
       email,
@@ -43,13 +43,13 @@ router.put(
     await existingUser.save();
 
     // Publisher
-    new UserUpdatedPublisher(natsWrapper.client).publish({
-      id      : existingUser.id,
-      version : -1,
-      email   : existingUser.email,
-      role    : existingUser.role,
-      props   : existingUser.props,
-    })
+    // new UserUpdatedPublisher(natsWrapper.client).publish({
+    //   id      : existingUser.id,
+    //   version : -1,
+    //   email   : existingUser.email,
+    //   role    : existingUser.role,
+    //   props   : existingUser.props,
+    // })
 
     res.status(200).send(existingUser);
   },

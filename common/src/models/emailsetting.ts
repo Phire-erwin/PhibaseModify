@@ -28,9 +28,9 @@ interface EmailSettingModel extends mongoose.Model<EmailSettingDoc> {
 interface EmailSettingDoc extends mongoose.Document {
   email               : string;
   previousPassword    : string;
-  add                 : string;
+  add                 : string; // value?
   password            : string;
-  port                : number;
+  port                : number; // value?
   outgoingName        : string;
   displayName         : string;
   role                : string;

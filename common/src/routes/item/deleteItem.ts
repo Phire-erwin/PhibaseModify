@@ -51,14 +51,14 @@ router.delete(
     
     }
 
-    await new ItemDeletedPublisher(natsWrapper.client).publish({
-      id:req.params.id,
-      version:-1,
-      name:"",
-      domain:"",
-      app:"",
-      props:{}
-    })
+    // await new ItemDeletedPublisher(natsWrapper.client).publish({
+    //   id:req.params.id,
+    //   version:-1,
+    //   name:"",
+    //   domain:"",
+    //   app:"",
+    //   props:{}
+    // })
   res.status(200).send({data:{}});
   },
 );

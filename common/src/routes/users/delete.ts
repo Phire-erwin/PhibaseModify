@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.delete(
   '/api/v1/common/users/:id',
-  requireAuth,
+  // requireAuth,
   async (req: Request, res: Response) => {
     // Check existing user
     const user = await User.findById(req.params.id);
@@ -18,13 +18,13 @@ router.delete(
     }
 
     // Publisher
-    new UserDeletedPublisher(natsWrapper.client).publish({
-      id      : user.id,
-      version : -1,
-      email   : user.email,
-      role    : user.role,
-      props   : user.props,
-    })
+    // new UserDeletedPublisher(natsWrapper.client).publish({
+    //   id      : user.id,
+    //   version : -1,
+    //   email   : user.email,
+    //   role    : user.role,
+    //   props   : user.props,
+    // })
 
     await user.remove();
 

@@ -1,4 +1,4 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryServer }from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../app';
@@ -27,10 +27,8 @@ beforeAll(async () => {
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
-  await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+
+  mongoose.connect(mongoUri);
 });
 
 beforeEach(async () => {
@@ -131,4 +129,18 @@ global.emulateRegistryEvent= async()=>{
 
   // return all of this stuff
   return { msg, data, listener };
+}
+
+function beforeAll(arg0: () => Promise<void>) {
+  throw new Error('Function not implemented.');
+}
+
+
+function beforeEach(arg0: () => Promise<void>) {
+  throw new Error('Function not implemented.');
+}
+
+
+function afterAll(arg0: () => Promise<void>) {
+  throw new Error('Function not implemented.');
 }

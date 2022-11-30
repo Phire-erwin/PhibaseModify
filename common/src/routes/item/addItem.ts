@@ -37,7 +37,7 @@ router.post(
      */
 
     // Check existing item
-    const existingItem = await Item.findOne({ "props.id": req.body.props.id, app: req.body.app })
+    const existingItem = await Item.findOne({ "props.id": req.body.props.id, app: req.body.app });
 
     if (existingItem) {
       throw new BadRequestError(`Item with ID ${req.body.props.id} is already registered`);
@@ -53,14 +53,14 @@ router.post(
       throw new BadRequestError("error to add item "+err)
     }
 
-    await new ItemCreatedPublisher(natsWrapper.client).publish({
-      id:item.id,
-      version:0,
-      name:item.name,
-      domain:item.domain[0],
-      app:item.app,
-      props:item.props
-    })
+    // await new ItemCreatedPublisher(natsWrapper.client).publish({
+    //   id:item.id,
+    //   version:0,
+    //   name:item.name,
+    //   domain:item.domain[0],
+    //   app:item.app,
+    //   props:item.props
+    // })
 
 
     
