@@ -59,7 +59,7 @@ const start = async () => {
     // process.on('SIGINT', () => natsWrapper.client.close());
     // process.on('SIGTERM', () => natsWrapper.client.close());
 
-    await mongoose.connect('mongodb://127.0.0.1:27017');
+    await mongoose.connect('mongodb+srv://admin:7CksDhFiypOuvya2@development.ibmhsu1.mongodb.net/test');
     console.info('Connected to MongoDB!');
   } catch (err) {
     console.error(err);

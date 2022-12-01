@@ -1,6 +1,10 @@
+<style>
+
+
+</style>
+
 <template>
   <div>
-
     <!-- Form Register -->
     <b-modal
         id="promptApp"
@@ -60,22 +64,23 @@
         <b-row>
           <b-card title="Request Application">
             <div style="overflow-x: visible;">
-              <b-table 
+              <b-table
                 id="application-table"
-                responsive 
-                :items="users" 
-                :per-page="perPage" 
+                responsive
+                :items="users"
+                :per-page="perPage"
                 :current-page="currentPage"
-                :fields="fields" 
-                :sort-by.sync="sortBy" 
-                :sort-desc.sync="sortDesc" 
-                :filter="search" 
+                :fields="fields"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                :filter="search"
                 select-mode="multi"
-                head-variant="dark" 
-                selectable 
-                hover 
-                small 
-                outlined 
+                head-variant="dark"
+                head-row-variant="green"
+                selectable
+                hover
+                small
+                outlined
                 :stacked=stackedStatus
                 @row-selected="onRowSelected">
                 <template #cell(selected)="{ rowSelected }">
@@ -101,7 +106,8 @@
                     </b-button>
                   </div>
                 </template>
-              </b-table>
+              </b-table
+                  >
             </div>
             <b-row>
               <b-col cols="4" class="pt-1">
